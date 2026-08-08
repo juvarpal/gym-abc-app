@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111827" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Gym ABC" />
+    <title>Gym A · B · C</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">PLAN DE ENTRENAMIENTO</p>
+          <h1>Gym <span>ABC</span></h1>
+          <p class="subtitle">Configura el objetivo de cada ejercicio y registra tus series.</p>
+        </div>
+        <p class="app-status">Tu plan, registros y evolución en un solo lugar.</p>
+      </header>
+
+      <nav class="app-tabs" aria-label="Secciones de la aplicación">
+        <button class="app-tab is-active" type="button" data-panel="workouts"><i aria-hidden="true">⌁</i><span>Ejercicios</span></button>
+        <button class="app-tab" type="button" data-panel="body"><i aria-hidden="true">◔</i><span>Peso</span></button>
+        <button class="app-tab" type="button" data-panel="goals"><i aria-hidden="true">◎</i><span>Objetivos</span></button>
+        <button class="app-tab" type="button" data-panel="calendar"><i aria-hidden="true">▦</i><span>Calendario</span></button>
+        <button class="app-tab" type="button" data-panel="settings"><i aria-hidden="true">⚙</i><span>Ajustes</span></button>
+      </nav>
+
+      <div class="app-panel is-active" data-panel="workouts">
+      <nav class="day-tabs" aria-label="Días de entrenamiento">
+        <button class="day-tab is-active" data-day="A" type="button"><b>A</b><span><strong>Día A</strong><small>Pecho · tríceps · cuádriceps</small></span></button>
+        <button class="day-tab" data-day="B" type="button"><b>B</b><span><strong>Día B</strong><small>Espalda · bíceps · femoral</small></span></button>
+        <button class="day-tab" data-day="C" type="button"><b>C</b><span><strong>Día C</strong><small>Hombro · abdomen · gemelos</small></span></button>
+      </nav>
+
+      <section class="workout-header" aria-live="polite">
+        <div>
+          <p class="eyebrow" id="day-label">DÍA A</p>
+          <h2 id="day-title">Pecho, tríceps y cuádriceps</h2>
+        </div>
+        <div class="session-actions">
+          <label class="field compact-field" for="session-date">Fecha
+            <input id="session-date" type="date" />
+          </label>
+          <button class="primary-button" id="complete-day" type="button">Guardar entrenamiento</button>
+        </div>
+      </section>
+
+      <section class="session-note" aria-label="Comentarios del entrenamiento">
+        <label class="field" for="session-notes">Comentarios de la sesión
+          <textarea id="session-notes" rows="3" placeholder="Energía, molestias, técnica, descanso…"></textarea>
+        </label>
+      </section>
+
+      <section id="exercise-list" class="exercise-list" aria-label="Ejercicios"></section>
+
+      <section class="advice-section" aria-labelledby="advice-title">
+        <div><p class="eyebrow">ANÁLISIS AUTOMÁTICO</p><h2 id="advice-title">Siguiente paso recomendado</h2></div>
+        <div id="training-advice" class="training-advice"></div>
+      </section>
+
+      <section class="progress-section" aria-labelledby="progress-title">
+        <div class="progress-heading">
+          <div>
+            <p class="eyebrow">EVOLUCIÓN</p>
+            <h2 id="progress-title">Progreso de carga</h2>
+          </div>
+          <label class="field exercise-picker" for="progress-exercise">Ejercicio
+            <select id="progress-exercise"></select>
+          </label>
+        </div>
+        <div id="progress-chart" class="progress-chart"></div>
+      </section>
+      </div>
+
+      <div class="app-panel" data-panel="body">
+      <section class="body-section" aria-labelledby="body-title">
+        <div class="body-heading">
+          <div>
+            <p class="eyebrow">COMPOSICIÓN CORPORAL</p>
+            <h2 id="body-title">Registro diario</h2>
+          </div>
+          <label class="field compact-field" for="body-date">Fecha
+            <input id="body-date" type="date" />
+          </label>
+        </div>
+        <div class="body-form">
+          <label class="field">Peso corporal (kg)<input id="body-weight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Grasa (%)<input id="body-fat-percent" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Grasa (kg)<input id="body-fat-kg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Masa ósea (kg)<input id="body-bone" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Músculo (kg)<input id="body-muscle" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <div class="lean-output"><span>Masa magra</span><strong id="body-lean">—</strong><small>Músculo + masa ósea</small></div>
+        </div>
+        <div class="body-footer"><p>Al cambiar grasa en % o kg, la otra cifra se calcula con tu peso.</p><button id="save-body" class="primary-button" type="button">Guardar registro corporal</button></div>
+        <div class="goal-grid" aria-label="Objetivos de composición corporal">
+          <article class="goal-card"><p>Objetivo de grasa</p><strong id="fat-goal-status">—</strong><span>Meta: 15 kg · 16,7 % al llegar a 90 kg</span></article>
+          <article class="goal-card"><p>Objetivo de masa magra</p><strong id="lean-goal-status">—</strong><span>Meta: 75 kg de músculo + masa ósea</span></article>
+          <article class="goal-card"><p>IMC actual</p><strong id="body-bmi">—</strong><span>Calculado con peso y altura</span></article>
+        </div>
+        <section class="body-insights" aria-labelledby="body-insights-title">
+          <div><p class="eyebrow">LECTURA AUTOMÁTICA</p><h3 id="body-insights-title">Tu evolución corporal</h3></div>
+          <div id="body-advice" class="body-advice"></div>
+        </section>
+        <div id="body-history-list" class="body-history-list" aria-label="Historial corporal"></div>
+      </section>
+
+      <section class="body-chart-section" aria-labelledby="body-chart-title">
+        <div class="progress-heading">
+          <div><p class="eyebrow">EVOLUCIÓN CORPORAL</p><h2 id="body-chart-title">Gráficas corporales</h2></div>
+          <label class="field exercise-picker" for="body-chart-metric">Mostrar
+            <select id="body-chart-metric">
+              <option value="weight">Peso corporal</option>
+              <option value="fatKg">Grasa (kg)</option>
+              <option value="fatPercent">Grasa (%)</option>
+              <option value="lean">Masa magra (kg)</option>
+            </select>
+          </label>
+        </div>
+        <div id="body-chart" class="body-chart"></div>
+      </section>
+      </div>
+
+      <section class="app-panel goals-panel" data-panel="goals" aria-labelledby="goals-title">
+        <p class="eyebrow">RUMBO A TU META</p>
+        <h2 id="goals-title">Objetivos y estimación</h2>
+        <p class="goals-intro">Define tu punto de inicio. La app comparará esa medición con tus registros posteriores para estimar la llegada a 15 kg de grasa y 75 kg de masa magra.</p>
+        <div class="baseline-form">
+          <label class="field">Fecha inicial<input id="baseline-date" type="date" /></label>
+          <label class="field">Peso inicial (kg)<input id="baseline-weight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Grasa inicial (kg)<input id="baseline-fat" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <label class="field">Magro inicial (kg)<input id="baseline-lean" type="number" min="0" step="0.1" inputmode="decimal" placeholder="—" /></label>
+          <button id="save-baseline" class="primary-button" type="button">Guardar punto de inicio</button>
+        </div>
+        <div id="goal-forecast" class="goal-forecast"></div>
+        <p class="forecast-note">Es una estimación matemática según tus datos; se vuelve más útil al acumular mediciones tomadas en condiciones similares.</p>
+      </section>
+
+      <div class="app-panel" data-panel="calendar">
+      <section class="calendar-section" aria-labelledby="calendar-title">
+        <div class="calendar-heading">
+          <div><p class="eyebrow">CONSTANCIA</p><h2 id="calendar-title">Calendario mensual</h2></div>
+          <div class="calendar-controls"><button id="previous-month" class="secondary-button" type="button" aria-label="Mes anterior">←</button><strong id="calendar-month"></strong><button id="next-month" class="secondary-button" type="button" aria-label="Mes siguiente">→</button></div>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+        <div id="training-calendar" class="training-calendar"></div>
+      </section>
+
+      <section class="history-section" aria-labelledby="history-title">
+        <div class="history-heading">
+          <div>
+            <p class="eyebrow">SEGUIMIENTO</p>
+            <h2 id="history-title">Historial de entrenamientos</h2>
+          </div>
+          <span id="history-count" class="history-count"></span>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+      </div>
+
+      <section class="app-panel settings-panel" data-panel="settings" aria-labelledby="settings-title">
+        <p class="eyebrow">TU APP</p>
+        <h2 id="settings-title">Ajustes y copias de seguridad</h2>
+        <div class="settings-grid">
+          <article class="settings-card profile-card">
+            <h3>Perfil</h3>
+            <p>La altura permite calcular el IMC; la edad se guarda como contexto para tus análisis.</p>
+            <div class="profile-fields">
+              <label class="field">Altura (cm)<input id="profile-height" type="number" min="50" max="250" step="0.1" inputmode="decimal" placeholder="—" /></label>
+              <label class="field">Edad<input id="profile-age" type="number" min="1" max="120" step="1" inputmode="numeric" placeholder="—" /></label>
+            </div>
+            <button id="save-profile" class="secondary-button" type="button">Guardar perfil</button>
+          </article>
+          <article class="settings-card">
+            <h3>Tus datos</h3>
+            <p>Exporta una copia para conservar el historial o importarla desde otro dispositivo.</p>
+            <div class="data-actions">
+              <button class="secondary-button" id="export-data" type="button">Exportar historial</button>
+              <label class="secondary-button import-button" for="import-data">Importar historial
+                <input id="import-data" type="file" accept="application/json,.json" />
+              </label>
+            </div>
+          </article>
+          <article class="settings-card">
+            <h3>Sesión actual</h3>
+            <p>Reinicia los registros sin modificar el historial de entrenamientos que ya guardaste.</p>
+            <button class="secondary-button" id="reset-day" type="button">Reiniciar día actual</button>
+          </article>
+          <article class="settings-card">
+            <h3>Sincronización</h3>
+            <p>La sincronización automática entre dispositivos se podrá conectar aquí cuando añadamos una cuenta segura.</p>
+          </article>
+          <article class="settings-card">
+            <h3>Instalar en iPhone</h3>
+            <p>Cuando la app esté publicada, ábrela con Safari, pulsa Compartir y elige “Añadir a pantalla de inicio”.</p>
+          </article>
+        </div>
+        <section class="exercise-settings" aria-labelledby="exercise-settings-title">
+          <div><p class="eyebrow">PERSONALIZA TU RUTINA</p><h3 id="exercise-settings-title">Ejercicios</h3></div>
+          <div class="exercise-settings-controls">
+            <label class="field">Día
+              <select id="settings-day"><option value="A">Día A</option><option value="B">Día B</option><option value="C">Día C</option></select>
+            </label>
+            <label class="field">Añadir de la lista
+              <select id="exercise-library"></select>
+            </label>
+            <button id="add-library-exercise" class="primary-button" type="button">Añadir</button>
+          </div>
+          <div class="custom-exercise-controls">
+            <label class="field">Ejercicio personalizado<input id="custom-exercise-name" type="text" maxlength="60" placeholder="Ej.: Press inclinado" /></label>
+            <label class="field">Grupo muscular
+              <select id="custom-exercise-group"><option>Pecho</option><option>Espalda</option><option>Hombro</option><option>Bíceps</option><option>Tríceps</option><option>Piernas</option><option>Abdomen</option></select>
+            </label>
+            <button id="add-custom-exercise" class="secondary-button" type="button">Añadir personalizado</button>
+          </div>
+          <div id="current-exercises-settings" class="current-exercises-settings"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="exercise-template">
+      <article class="exercise-card">
+        <div class="exercise-top">
+          <div>
+            <p class="muscle-group"></p>
+            <h3></h3>
+          </div>
+          <label class="done-toggle"><input type="checkbox" /> Hecho</label>
+        </div>
+        <div class="targets">
+          <p class="target-label">Objetivo configurable</p>
+          <div class="target-grid">
+            <label class="field">Series
+              <input class="sets-input" type="number" min="1" max="12" inputmode="numeric" />
+            </label>
+            <label class="field">Repeticiones
+              <input class="reps-input" type="text" maxlength="8" inputmode="numeric" />
+            </label>
+          </div>
+        </div>
+        <div class="next-plan">
+          <div class="series-heading"><p>Plan para próxima sesión</p><button class="use-plan" type="button">Usar en el registro de hoy</button></div>
+          <div class="plan-list"></div>
+        </div>
+        <div class="series-area">
+          <div class="series-heading"><p>Registro de hoy</p><button class="add-series" type="button">+ Añadir serie</button></div>
+          <div class="series-list"></div>
+        </div>
+      </article>
+    </template>
+
+    <template id="series-template">
+      <div class="series-row">
+        <span class="series-number"></span>
+        <label>Peso (kg)<input class="weight-input" type="number" min="0" step="0.5" inputmode="decimal" placeholder="—" /></label>
+        <label>Reps<input class="actual-reps-input" type="number" min="0" max="100" inputmode="numeric" placeholder="—" /></label>
+        <button class="remove-series" type="button" aria-label="Eliminar serie">×</button>
+      </div>
+    </template>
+
+    <template id="plan-series-template">
+      <div class="plan-row">
+        <span class="plan-number"></span>
+        <label>Peso previsto (kg)<input class="plan-weight-input" type="number" min="0" step="0.5" inputmode="decimal" placeholder="—" /></label>
+        <label>Reps previstas<input class="plan-reps-input" type="text" maxlength="8" inputmode="numeric" placeholder="—" /></label>
+      </div>
+    </template>
+
+    <template id="history-template">
+      <article class="history-card">
+        <div class="history-card-top">
+          <div><p class="history-day"></p><h3 class="history-date"></h3></div>
+          <button class="delete-history" type="button">Eliminar</button>
+        </div>
+        <div class="history-exercises"></div>
+      </article>
+    </template>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
