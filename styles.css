@@ -129,14 +129,16 @@ input:focus { border-color:#64748b; box-shadow:0 0 0 3px #cbd5e155; }
 .calendar-weekdays, .training-calendar { display:grid; grid-template-columns:repeat(7, 1fr); gap:7px; }
 .calendar-weekdays { margin-top:20px; color:var(--muted); text-align:center; font-size:.7rem; font-weight:750; }
 .training-calendar { margin-top:7px; }
-.calendar-day { min-height:74px; padding:7px; border:1px solid var(--line); border-radius:10px; background:var(--soft); }
+.calendar-day { min-height:64px; padding:7px; border:1px solid var(--line); border-radius:10px; background:var(--soft); }
 .calendar-day.is-empty { visibility:hidden; }
 .calendar-day.is-today { border-color:#b9d338; background:#f7f9e9; }
 .calendar-number { display:block; margin-bottom:5px; font-size:.74rem; font-weight:750; }
-.calendar-tags, .calendar-details { display:grid; gap:3px; }
-.calendar-tag { display:inline-flex; padding:2px 4px; border-radius:4px; background:#172033; color:#fff; font-size:.61rem; font-weight:750; }
+.calendar-tags, .calendar-details { display:flex; flex-wrap:wrap; align-items:center; gap:3px; }
+.calendar-tag { display:grid; place-items:center; width:17px; height:17px; border-radius:50%; background:#172033; color:#fff; font-size:.56rem; font-weight:800; }
 .calendar-tag.body { background:#ff896d; color:#30120b; }
-.calendar-metric { color:var(--muted); font-size:.61rem; font-weight:650; line-height:1.2; }
+.calendar-body-stats { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); width:100%; gap:2px; }
+.calendar-metric { overflow:hidden; color:var(--muted); font-size:.55rem; font-weight:750; line-height:1.2; white-space:nowrap; }
+.calendar-metric i { margin-right:1px; color:var(--ink); font-size:.58rem; font-style:normal; }
 
 /* Visual refresh */
 body { background:radial-gradient(circle at 10% -10%, #e9ff73 0, transparent 26rem), radial-gradient(circle at 100% 8%, #ffc7bb 0, transparent 30rem), #f3f5f8; }
@@ -221,4 +223,4 @@ body { background:radial-gradient(circle at 10% -10%, #e9ff73 0, transparent 26r
 .settings-exercise-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
 .settings-exercise-row span { color:var(--muted); font-size:.76rem; }
 .remove-exercise { border:0; background:transparent; color:#bf3c24; font-size:.75rem; font-weight:750; }
-@media (max-width:720px) { .app-shell { width:min(100% - 24px, 560px); padding-top:25px; } .hero, .workout-header, .progress-heading, .body-heading, .body-footer, .calendar-heading { align-items:flex-start; flex-direction:column; } .app-status { max-width:none; text-align:left; } .app-tabs { overflow:auto; } .app-tab { min-width:92px; } .data-actions { justify-content:flex-start; } .day-tabs { grid-template-columns:1fr; } .day-tab { min-height:auto; } .session-actions { width:100%; align-items:end; } .compact-field, .exercise-picker { width:100%; min-width:0; } .primary-button { padding-inline:12px; } .exercise-list, .history-list, .progress-summary, .body-form, .goal-grid, .body-history-list, .settings-grid, .exercise-settings-controls, .custom-exercise-controls, .body-advice, .baseline-form, .goal-forecast, .profile-fields { grid-template-columns:1fr; } .advice-section { grid-template-columns:1fr; } .progress-section, .body-section, .body-chart-section, .calendar-section, .settings-panel, .goals-panel { padding:20px; } .calendar-day { min-height:58px; padding:5px; } .calendar-tag { font-size:.54rem; } }
+@media (max-width:720px) { .app-shell { width:min(100% - 24px, 560px); padding-top:25px; } .hero, .workout-header, .progress-heading, .body-heading, .body-footer, .calendar-heading { align-items:flex-start; flex-direction:column; } .app-status { max-width:none; text-align:left; } .app-tabs { overflow:auto; } .app-tab { min-width:92px; } .data-actions { justify-content:flex-start; } .day-tabs { grid-template-columns:1fr; } .day-tab { min-height:auto; } .session-actions { width:100%; align-items:end; } .compact-field, .exercise-picker { width:100%; min-width:0; } .primary-button { padding-inline:12px; } .exercise-list, .history-list, .progress-summary, .body-form, .goal-grid, .body-history-list, .settings-grid, .exercise-settings-controls, .custom-exercise-controls, .body-advice, .baseline-form, .goal-forecast, .profile-fields { grid-template-columns:1fr; } .advice-section { grid-template-columns:1fr; } .progress-section, .body-section, .body-chart-section, .calendar-section, .settings-panel, .goals-panel { padding:20px; } .calendar-day { min-height:52px; padding:5px; } .calendar-tag { width:15px; height:15px; font-size:.51rem; } .calendar-metric { font-size:.5rem; } .calendar-metric i { font-size:.53rem; } }
