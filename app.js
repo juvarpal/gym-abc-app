@@ -249,14 +249,18 @@ function renderCalendar() {
     if (date === today()) cell.classList.add("is-today");
     const number = document.createElement("span"); number.className = "calendar-number"; number.textContent = day; cell.append(number);
     const details = document.createElement("div"); details.className = "calendar-details";
-    (state.history || []).filter(session => session.date === date).forEach(session => { const routine = document.createElement("span"); routine.className = "calendar-tag"; routine.textContent = `Día ${session.day}`; details.append(routine); });
+    (state.history || []).filter(session => session.date === date).forEach(session => { const routine = document.createElement("span"); routine.className = "calendar-tag"; routine.title = `Día ${session.day}`; routine.textContent = session.day; details.append(routine); });
     const bodyEntry = (state.bodyHistory || []).find(entry => entry.date === date);
     if (bodyEntry) {
-      [["Peso", bodyEntry.weight], ["Grasa", bodyEntry.fatKg], ["Magro", bodyEntry.lean]].forEach(([label, value]) => {
+      const stats = document.createElement("div"); stats.className = "calendar-body-stats";
+      [["⚖", "Peso", bodyEntry.weight], ["◉", "Grasa", bodyEntry.fatKg], ["◆", "Magro", bodyEntry.lean]].forEach(([icon, label, value]) => {
         const metric = document.createElement("span"); metric.className = "calendar-metric";
-        metric.textContent = `${label} ${new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 }).format(value)} kg`;
-        details.append(metric);
+        metric.title = `${label}: ${new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 }).format(value)} kg`;
+        const symbol = document.createElement("i"); symbol.textContent = icon;
+        metric.append(symbol, document.createTextNode(new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 }).format(value)));
+        stats.append(metric);
       });
+      details.append(stats);
     }
     cell.append(details); calendar.append(cell);
   }
